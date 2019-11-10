@@ -16,7 +16,7 @@ import java.io.UnsupportedEncodingException;
  * @create 2019-11-10 1:46
  * @motto show me the code ,change the word
  * @blog https://artisan.blog.csdn.net/
- * @description
+ * @description 同步发送消息
  **/
 
 public class SyncProducer {
@@ -24,21 +24,34 @@ public class SyncProducer {
     public static void main(String[] args) throws MQClientException, RemotingException, InterruptedException, MQBrokerException, UnsupportedEncodingException {
         //Instantiate with a producer group name.
         DefaultMQProducer producer = new
-                DefaultMQProducer("please_rename_unique_group_name");
+                DefaultMQProducer("Artisan_ProducerGroup");
         // Specify name server addresses.
-        producer.setNamesrvAddr("localhost:9876");
+        producer.setNamesrvAddr("192.168.18.130:9876;192.168.18.131:9876");
+        // 设置超时时间，默认3秒
+        producer.setSendMsgTimeout(10_000);
         //Launch the instance.
         producer.start();
-        for (int i = 0; i < 100; i++) {
-            //Create a message instance, specifying topic, tag and message body.
-            Message msg = new Message("TopicTest" /* Topic */,
-                    "TagA" /* Tag */,
-                    ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET) /* Message body */
-            );
-            //Call send message to deliver message to one of brokers.
-            SendResult sendResult = producer.send(msg);
-            System.out.printf("%s%n", sendResult);
-        }
+//        for (int i = 0; i < 100; i++) {
+//            //Create a message instance, specifying topic, tag and message body.
+//            Message msg = new Message("TopicArtisan" /* Topic */,
+//                    "TagArtisan" /* Tag */,
+//                    ("Artisan:Hello RocketMQ  " + i).getBytes(RemotingHelper.DEFAULT_CHARSET) /* Message body */
+//            );
+//            //Call send message to deliver message to one of brokers.
+//            SendResult sendResult = producer.send(msg);
+//            System.out.printf("%s%n", sendResult);
+//        }
+
+
+        //Create a message instance, specifying topic, tag and message body.
+        Message msg = new Message("TopicArtisan" /* Topic */,
+                "TagArtisan" /* Tag */,
+                ("Artisan:Hello RocketMQ  ").getBytes(RemotingHelper.DEFAULT_CHARSET) /* Message body */
+        );
+        //Call send message to deliver message to one of brokers.
+        SendResult sendResult = producer.send(msg);
+        System.out.printf("%s%n", sendResult);
+
         //Shut down once the producer instance is not longer in use.
         producer.shutdown();
     }
