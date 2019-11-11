@@ -3,6 +3,8 @@ package com.artisan.rocketmq.schedule;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
 
+import java.util.Date;
+
 /**
  * @author 小工匠
  * @version v1.0
@@ -24,13 +26,13 @@ public class ScheduledMessageProducer {
         int totalMessagesToSend = 3;
         for (int i = 0; i < totalMessagesToSend; i++) {
             Message message = new Message("TestTopic", ("Hello scheduled message " + i).getBytes());
-            //延时消费
+            //延时消费  6-->2分钟
             message.setDelayTimeLevel(6);
             // Send the message
             producer.send(message);
         }
 
-        System.out.printf("message send is completed .%n");
+        System.out.printf("message send is completed .%n" + new Date());
         producer.shutdown();
     }
 }
